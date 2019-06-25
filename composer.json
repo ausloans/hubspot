@@ -1,13 +1,7 @@
 {
-    "name": "fungku/hubspot",
+    "name": "ausloans/hubspot",
     "description": "HubSpot PHP API client (wrapper for haPiHP)",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "fungku",
-            "email": "fungku@gmail.com"
-        }
-    ],
+    "license": "Apache-2.0",    
     "require": {
         "php": ">=5.3.0"
     },

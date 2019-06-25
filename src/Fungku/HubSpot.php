@@ -36,7 +36,7 @@ class HubSpot {
         $this->connectTimeout = $connectTimeout;
 
         if (is_null($this->hapikey))
-            $this->hapikey = getenv('HUBSPOT_APIKEY');
+            $this->hapikey = getenv('HUBSPOT_KEY');
     }
 
     public function blog()          { return new Blog($this->hapikey, $this->connectTimeout, $this->userAgent); }
