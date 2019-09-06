@@ -2,6 +2,8 @@
 
 namespace Fungku\HubSpot\API;
 
+use Illuminate\Support\Facades\Log;
+
 /**
 * Copyright 2013 HubSpot, Inc.
 *
@@ -50,9 +52,7 @@ class Deals extends BaseClient {
 			}    		
 		}
 		
-    	$properties = json_encode(array(
-			"properties" => $properties
-		));
+    	$properties = array("properties" => $properties);
 
 		if (array_key_exists('associatedVids', $params)) {
 			$properties['associations']['associatedVids'] = $params['associatedVids'];
@@ -61,6 +61,8 @@ class Deals extends BaseClient {
 		if (array_key_exists('associatedCompanyIds', $params)) {
 			$properties['associations']['associatedCompanyIds'] = $params['associatedCompanyIds'];
 		}
+
+		$properties = json_encode($properties);
 
     	try{
     		return json_decode($this->execute_JSON_post_request($this->get_request_url($endpoint,null),$properties));
@@ -87,10 +89,11 @@ class Deals extends BaseClient {
     	foreach ($params as $key => $value) {
 			if (!in_array($key, $excemptKeys)) {
 				array_push($properties, array("name" => $key,"value" => $value));
-			}
-    	}
-		$properties = json_encode(array("properties" => $properties));
-		
+			}    		
+		}
+				
+    	$properties = array("properties" => $properties);
+
 		if (array_key_exists('associatedVids', $params)) {
 			$properties['associations']['associatedVids'] = $params['associatedVids'];
 		}
@@ -98,6 +101,8 @@ class Deals extends BaseClient {
 		if (array_key_exists('associatedCompanyIds', $params)) {
 			$properties['associations']['associatedCompanyIds'] = $params['associatedCompanyIds'];
 		}
+
+		$properties = json_encode($properties);
 
     	try{
 			return json_decode($this->execute_JSON_post_request($this->get_request_url($endpoint,null),$properties));
