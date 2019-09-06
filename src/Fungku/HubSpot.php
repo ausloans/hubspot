@@ -13,6 +13,7 @@ use Fungku\HubSpot\API\Settings;
 use Fungku\HubSpot\API\SocialMedia;
 use Fungku\HubSpot\API\Workflows;
 use Fungku\HubSpot\API\Engagement;
+use Fungku\HubSpot\API\Deals;
 
 class HubSpot {
 
@@ -64,4 +65,6 @@ class HubSpot {
     public function workflows()     { return new WorkFlows($this->hapikey, $this->connectTimeout, $this->userAgent); }
 
     public function engagement()    { return new Engagement($this->hapikey, $this->connectTimeout, $this->userAgent);}
+
+    public function deal()          { return new Deals($this->hapikey, $this->connectTimeout, $this->userAgent); }
 }
