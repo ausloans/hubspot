@@ -40,11 +40,28 @@ class Deals extends BaseClient {
     **/
     public function create_deal($params){
     	$endpoint = 'deal';
-    	$properties = array();
+		$properties = array();
+		
+		$excemptKeys = ['associatedVids','associatedCompanyIds']; // do not include these on property, just add them on associations
+
     	foreach ($params as $key => $value) {
-    		array_push($properties, array("property" => $key,"value" => $value));
-    	}
-    	$properties = json_encode(array("properties"=>$properties));
+			if (!in_array($key, $excemptKeys)) {
+				array_push($properties, array("name" => $key,"value" => $value));
+			}    		
+		}
+		
+    	$properties = json_encode(array(
+			"properties" => $properties
+		));
+
+		if (array_key_exists('associatedVids', $params)) {
+			$properties['associations']['associatedVids'] = $params['associatedVids'];
+		}
+
+		if (array_key_exists('associatedCompanyIds', $params)) {
+			$properties['associations']['associatedCompanyIds'] = $params['associatedCompanyIds'];
+		}
+
     	try{
     		return json_decode($this->execute_JSON_post_request($this->get_request_url($endpoint,null),$properties));
     	} catch (HubSpotException $e) {
@@ -63,11 +80,25 @@ class Deals extends BaseClient {
     **/
     public function update_deal($dealId, $params){
     	$endpoint = 'deal/' . $dealId;
-    	$properties = array();
+		$properties = array();
+		
+		$excemptKeys = ['associatedVids','associatedCompanyIds']; // do not include these on property, just add them on associations
+
     	foreach ($params as $key => $value) {
-    		array_push($properties, array("property" => $key,"value" => $value));
+			if (!in_array($key, $excemptKeys)) {
+				array_push($properties, array("name" => $key,"value" => $value));
+			}
     	}
-    	$properties = json_encode(array("properties" => $properties));
+		$properties = json_encode(array("properties" => $properties));
+		
+		if (array_key_exists('associatedVids', $params)) {
+			$properties['associations']['associatedVids'] = $params['associatedVids'];
+		}
+
+		if (array_key_exists('associatedCompanyIds', $params)) {
+			$properties['associations']['associatedCompanyIds'] = $params['associatedCompanyIds'];
+		}
+
     	try{
 			return json_decode($this->execute_JSON_post_request($this->get_request_url($endpoint,null),$properties));
     	} catch (HubSpotException $e) {
