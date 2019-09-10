@@ -105,7 +105,7 @@ class Deals extends BaseClient {
 		$properties = json_encode($properties);
 
     	try{
-			return json_decode($this->execute_JSON_post_request($this->get_request_url($endpoint,null),$properties));
+			return json_decode($this->execute_put_request($this->get_request_url($endpoint,null),$properties));
     	} catch (HubSpotException $e) {
     		throw new HubSpotException('Unable to update deal: ' . $e);
     	}
