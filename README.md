@@ -6,17 +6,20 @@
 
 If you want to use the new COS or v2 endpoints, I am writing a completely new api client: https://github.com/fungku/hubspot-php
 
+## V2 Create or Update 
+Some V2 has been backported to work in the existing codebase.
+
+Tested under Laravel 6/7/8 by Ausloan Devs.
+
+
 ## Setup
 
-In composer.json:
+Run `composer require ausloans/hubspot`
 
+Then add the following to config/app.php under 'Providers'
+```php
+Fungku\HubSpot\HubSpotServiceProvider::class,
 ```
-"require": {
-	"fungku/hubspot": "1.0.*"
-}
-```
-then run `composer install` or `composer update`
-
 
 ## Example
 
