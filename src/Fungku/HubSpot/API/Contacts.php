@@ -75,6 +75,30 @@ class Contacts extends BaseClient {
     	}
     }
 
+	/**
+    * Update or Create a Contact
+    * @param email: client email
+    * @param params: array of properties and property values for contact
+	*
+    * @return Response body from HTTP POST request
+    *
+    * @throws HubSpotException
+    **/
+	public function create_or_update_contact($email, $params){
+    	$endpoint = 'contact/createOrUpdate/email/'.$email.'/';
+    	$properties = array();
+    	foreach ($params as $key => $value) {
+    		array_push($properties, array("property"=>$key,"value"=>$value));
+    	}
+    	$properties = json_encode(array("properties"=>$properties));
+    	try{
+			$req = json_decode($this->execute_JSON_post_request($this->get_request_url($endpoint,null),$properties));
+			return $req;
+    	} catch (HubSpotException $e) {
+    		throw new HubSpotException('Unable to update contact: ' . $e);
+    	}
+    }
+
     /**
 	* Delete a Contact
 	*
