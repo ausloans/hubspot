@@ -73,7 +73,7 @@ class BaseClient
         $this->HAPIKey = $HAPIKey;
         $this->connectTimeout = $connectTimeout;
         $this->userAgent = $userAgent;
-        $this->header_auth = 'Bearer '.$HAPIKey
+        $this->header_auth = 'Bearer '.$HAPIKey;
     }
 
     /**
