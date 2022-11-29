@@ -34,6 +34,7 @@ class BaseClient
     protected $PROD_DOMAIN = 'https://api.hubapi.com';
     protected $QA_DOMAIN = 'https://hubapiqa.com';
     protected $userAgent;    // new
+    protected $header_auth = '';
 
     /**
      * The HTTP status of the most recent request
@@ -72,6 +73,7 @@ class BaseClient
         $this->HAPIKey = $HAPIKey;
         $this->connectTimeout = $connectTimeout;
         $this->userAgent = $userAgent;
+        $this->header_auth = 'Bearer '.$HAPIKey
     }
 
     /**
@@ -154,8 +156,10 @@ class BaseClient
     {
         $paramstring = $this->array_to_params($params);
 
+        // return $this->get_domain() . $this->PATH_DIV.$this->get_api() . $this->PATH_DIV . $this->get_api_version() .
+        //        $this->PATH_DIV . $endpoint . $this->KEY_PARAM . $this->HAPIKey . $paramstring;
         return $this->get_domain() . $this->PATH_DIV.$this->get_api() . $this->PATH_DIV . $this->get_api_version() .
-               $this->PATH_DIV . $endpoint . $this->KEY_PARAM . $this->HAPIKey . $paramstring;
+               $this->PATH_DIV . $endpoint . $paramstring;
     }
 
     /**
@@ -170,7 +174,9 @@ class BaseClient
     {
         $paramstring = $this->array_to_params($params);
 
-        return $url_base . $this->KEY_PARAM . $this->HAPIKey . $paramstring;
+        // return $url_base . $this->KEY_PARAM . $this->HAPIKey . $paramstring;
+        return $url_base . $paramstring;
+
     }
 
     /**
@@ -190,6 +196,9 @@ class BaseClient
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);    // new
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Authorization: '.$this->header_auth
+        )); 
         $output = curl_exec($ch);
         $errno = curl_errno($ch);
         $error = curl_error($ch);
@@ -222,10 +231,16 @@ class BaseClient
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);    // new
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Authorization: '.$this->header_auth
+        )); 
 
         if ($formenc)
         {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Authorization '.$this->header
+            ));
         }
 
         $output = curl_exec($ch);
@@ -260,7 +275,10 @@ class BaseClient
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);    // new
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));    // new
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Authorization: '.$this->header_auth
+        ));    // new
         $output = curl_exec($ch);
         $errno = curl_errno($ch);
         $error = curl_error($ch);
@@ -293,7 +311,10 @@ class BaseClient
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/atom+xml'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/atom+xml',
+            'Authorization: '.$this->header_auth
+        ));
         $output = curl_exec($ch);
         $errno = curl_errno($ch);
         $error = curl_error($ch);
@@ -322,7 +343,11 @@ class BaseClient
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($body)));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($body)),
+            'Authorization: '.$this->header_auth
+        );
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_POSTFIELDS,$body);
@@ -355,7 +380,11 @@ class BaseClient
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/atom+xml','Content-Length: ' . strlen($body)));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/atom+xml',
+            'Content-Length: ' . strlen($body),
+            'Authorization: '.$this->header_auth
+            ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_POSTFIELDS,$body);
@@ -388,7 +417,11 @@ class BaseClient
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($body)));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($body),
+            'Authorization: '.$this->header_auth
+        ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($ch, CURLOPT_POSTFIELDS,$body);

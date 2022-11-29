@@ -11,6 +11,12 @@ Some V2 has been backported to work in the existing codebase.
 
 Tested under Laravel 6/7/8 by Ausloan Devs.
 
+## 29/11/2022 
+DEPRECATE: ?hapi= Query Params
+This Lib was updated to take in Private App Keys as the Hubspot API Key has been deprecated from 30/11/2022.
+From now onwards Authorization Header is used instead of ?hapi=
+
+
 
 ## Setup
 
